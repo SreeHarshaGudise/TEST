@@ -24,13 +24,13 @@ pre_df = vendor_sales_case.\
 
 #calculated columns
 final_df = ris_df\
-    .withColumn(when(ris_df.CASE_STATUS_CD == 'OPEN','Open').when(ris_df.CASE_STATUS_CD =='CLSD','Closed').alias('Case_Status'))\
-    .withColumn(when(ris_df.CASE_STATUS_CD == 'OPEN', datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(ris_df.Case_Open_Date, 'yyyy-MM-dd'))))
+    .withColumn('Case_Status',when(ris_df.CASE_STATUS_CD == 'OPEN','Open').when(ris_df.CASE_STATUS_CD =='CLSD','Closed'))\
+    .withColumn('CycleTime',when(ris_df.CASE_STATUS_CD == 'OPEN', datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(ris_df.Case_Open_Date, 'yyyy-MM-dd'))))
                 .otherwise(datediff
                        (when(to_date(from_unixtime(unix_timestamp(ris_df.EFFTV_END_TS, 'yyyy-MM-dd'))) == '9999-12-31','null'),
                         to_date(from_unixtime(unix_timestamp(ris_df.Case_Open_Date, 'yyyy-MM-dd')))
                         )
-                   ).alias('CycleTime'))
+                   ))
 
 #columns
 bdg_atscase = final_df.select(
