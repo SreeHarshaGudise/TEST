@@ -31,14 +31,19 @@ final_df = ris_df\
                          from_unixtime(unix_timestamp(col('EFFTV_END_TS'),'MM/dd/yyyy')),
                          from_unixtime(unix_timestamp(col('Case_Open_Date'),'MM/dd/yyyy'))
                      )
-                     ).otherwise('null'))
+                     ).otherwise(datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(col('Case_Open_Date'),'MM/dd/yyyy')))))\
+    .withColumn('Case_Closed_Date',
+                when(
+                    to_date(from_unixtime(unix_timestamp(col('EFFTV_END_TS'),'MM/dd/yyyy'))) == '9999-12-31','null').\
+                otherwise(to_date(from_unixtime(unix_timestamp(col('EFFTV_END_TS'), 'MM/dd/yyyy')))
+                          )
+                )
+
 
 #columns
 bdg_atscase = final_df.select(
     col('VGI_Assigned_Case_ID'),
-    from_unixtime(unix_timestamp(final_df.Case_Open_Date, 'yyyy-MM-dd')).alias('Case_Open_Date'),
-    when(from_unixtime(unix_timestamp(final_df.EFFTV_END_TS, 'yyyy-MM-dd')) == '9999-12-31','null').
-        otherwise(from_unixtime(unix_timestamp(final_df.EFFTV_END_TS, 'yyyy-MM-dd'))).alias('Case_Closed_Date'),
+    col('Case_Closed_Date'),
     col('Case_Status'),
     col('CycleTime'),
     col('Owner_POID')).distinct()
