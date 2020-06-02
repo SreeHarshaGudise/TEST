@@ -27,7 +27,7 @@ final_df = ris_df\
     .withColumn('Case_Status',when(col('CASE_STATUS_CD') == 'OPEN','Open').when(col('CASE_STATUS_CD') =='CLSD','Closed'))\
     .withColumn('CycleTime',when(col('CASE_STATUS_CD') == 'OPEN',datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(col('Case_Open_Date'),'MM/dd/yyyy'))))
                 .otherwise(datediff
-                       (when(from_unixtime(unix_timestamp(col('EFFTV_END_TS'),'MM/dd/yyyy')) == '9999-12-31','null'),
+                       (when(from_unixtime(unix_timestamp(col('EFFTV_END_TS'),'MM/dd/yyyy')) == '9999-12-31','null').otherwise(from_unixtime(unix_timestamp(col('EFFTV_END_TS'),'MM/dd/yyyy'))),
                         from_unixtime(unix_timestamp(col('Case_Open_Date'),'MM/dd/yyyy'))
                         )
                    ))
