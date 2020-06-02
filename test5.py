@@ -24,11 +24,11 @@ pre_df = vendor_sales_case.\
 
 #calculated columns
 final_df = ris_df\
-    .withColumn('Case_Status',when(ris_df.CASE_STATUS_CD == 'OPEN','Open').when(ris_df.CASE_STATUS_CD =='CLSD','Closed'))\
-    .withColumn('CycleTime',when(ris_df.CASE_STATUS_CD == 'OPEN', datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(ris_df.Case_Open_Date, 'yyyy-MM-dd'))))
+    .withColumn('Case_Status',when(col('CASE_STATUS_CD') == 'OPEN','Open').when(col('CASE_STATUS_CD') =='CLSD','Closed'))\
+    .withColumn('CycleTime',when(col('CASE_STATUS_CD') == 'OPEN',datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(col('Case_Open_Date'),'MM/dd/yyyy'))))
                 .otherwise(datediff
-                       (when(to_date(from_unixtime(unix_timestamp(ris_df.EFFTV_END_TS, 'yyyy-MM-dd'))) == '9999-12-31','null'),
-                        to_date(from_unixtime(unix_timestamp(ris_df.Case_Open_Date, 'yyyy-MM-dd')))
+                       (when(from_unixtime(unix_timestamp(col('EFFTV_END_TS'),'MM/dd/yyyy')) == '9999-12-31','null'),
+                        from_unixtime(unix_timestamp(col('Case_Open_Date'),'MM/dd/yyyy'))
                         )
                    ))
 
