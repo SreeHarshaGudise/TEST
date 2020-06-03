@@ -47,3 +47,16 @@ bdg_atscase = final_df.select(
     col('Case_Status'),
     col('CycleTime'),
     col('Owner_POID')).distinct()
+
+
+
+#-- Demo points
+#*  The agenda would be extracting ats data which has details about cases information and its cycle time for a respective POID.
+#*   In order to acquire bdg_ats  case data, following tables are needed:
+#    * Client Information
+#    * vndr case 
+#*  We joined both tables on assigned case id column where respective crew owner POID shouldn't be null and 
+#   client relationship cd should be CNT, case type be SALE.
+#*  Logic for Cycletime is number of days between dates when the case has been opened and closed. If the case status 
+#   is still open for the day we calculate the difference between current date and case opened date.
+#*  We are extracting this ats data by implementing in NEW WAYS OF CODING technique.
