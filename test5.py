@@ -73,3 +73,29 @@ Where
 (Vendor_Sales_Case.CREW_OWNER_PO_ID IS NOT NULL)
 And
 (Vendor_Sales_Case.VNDR_CASE_TYP_CD = 'SALE')
+
+                                                                                                                
+                                                                                                                
+                                                                                                                
+                                                                                                                
+                                                                                                                
+                                                                                                                
+  Updated Changes
+(cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) = '2020-05-20' ) 
+ and (
+     (cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) >= date_add(current_date(),1-day(current_date())) - INTERVAL '12' MONTH
+     ) 
+     OR 
+     (
+         (CASE WHEN CAST(Vendor_Sales_Case52.EFFTV_END_TS as date) = '9999-12-31' 
+          THEN NULL 
+          ELSE 
+          CAST(Vendor_Sales_Case52.EFFTV_END_TS as date) 
+          END >= 
+          date_add(current_date(),1-day(current_date())) - INTERVAL '12' MONTH 
+         ) and 
+         (cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) >= date_add(current_date(),1-day(current_date())) - INTERVAL '24' MONTH
+         )
+and (remaining logic)                                                                                                        
+                                                                                                                
+                                                                                                                
