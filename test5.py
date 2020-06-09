@@ -60,3 +60,16 @@ bdg_atscase = final_df.select(
 #*  Logic for Cycletime is number of days between dates when the case has been opened and closed. If the case status 
 #   is still open for the day we calculate the difference between current date and case opened date.
 #*  We are extracting this ats data by implementing in NEW WAYS OF CODING technique.
+
+
+
+
+
+
+
+Where
+((cast(vendor_sales_case.EFFTV_END_TS as date) >= current_date() - INTERVAL '12' DAY - day(current_date())) OR ((CASE WHEN CAST(Vendor_sales_case.EFFTV_END_TS as date) = '9999-12-31' then null else cast(vendor_sales_Case.EFFTV_END_TS as date) end >= current_date() - INTERVAL '12' DAY - day(current_date())) and (cast(Vendor_Sales_Case.EFFTV_BGN_TS as date) >= CURRENT_DATE - INTERVAL '24' DAY) and (Client_Information.CASE_RLSHP_TYP_CD = 'CLNT') and
+(Vendor_Sales_Case.CREW_OWNER_PO_ID > 0) and
+(Vendor_Sales_Case.CREW_OWNER_PO_ID IS NOT NULL)
+And
+(Vendor_Sales_Case.VNDR_CASE_TYP_CD = 'SALE')
