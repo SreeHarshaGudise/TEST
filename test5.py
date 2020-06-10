@@ -65,37 +65,38 @@ bdg_atscase = final_df.select(
 
 
 
-
-
-Where
-((cast(vendor_sales_case.EFFTV_END_TS as date) >= current_date() - INTERVAL '12' DAY - day(current_date())) OR ((CASE WHEN CAST(Vendor_sales_case.EFFTV_END_TS as date) = '9999-12-31' then null else cast(vendor_sales_Case.EFFTV_END_TS as date) end >= current_date() - INTERVAL '12' DAY - day(current_date())) and (cast(Vendor_Sales_Case.EFFTV_BGN_TS as date) >= CURRENT_DATE - INTERVAL '24' DAY) and (Client_Information.CASE_RLSHP_TYP_CD = 'CLNT') and
-(Vendor_Sales_Case.CREW_OWNER_PO_ID > 0) and
-(Vendor_Sales_Case.CREW_OWNER_PO_ID IS NOT NULL)
-And
-(Vendor_Sales_Case.VNDR_CASE_TYP_CD = 'SALE')
-
-                                                                                                                
-                                                                                                                
-                                                                                                                
-                                                                                                                
-                                                                                                                
-                                                                                                                
-  Updated Changes
-(cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) = '2020-05-20' ) 
- and (
-     (cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) >= date_sub(current_date(),1-day(current_date())) - INTERVAL '12' MONTH
-     ) 
-     OR 
-     (
-         (CASE WHEN CAST(Vendor_Sales_Case52.EFFTV_END_TS as date) = '9999-12-31' 
-          THEN NULL 
-          ELSE 
-          CAST(Vendor_Sales_Case52.EFFTV_END_TS as date) 
-          END >= 
-          date_sub(current_date(),1-day(current_date())) - INTERVAL '12' MONTH 
-         ) and 
-         (cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) >= date_sub(current_date(),1-day(current_date())) - INTERVAL '24' MONTH
-         )
-and (remaining logic)                                                                                                        
+#select statement
+select 
+    cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) Case_Open_Date,
+    Vendor_Sales_Case52.CREW_OWNR_PO_ID as Owner_POID,
+    count(Vendor_Sales_Case52.EFFTV_BGN_TS) as Case_opened_Ats
+    from entmaster.trpt_vndr_case Vendor_Sales_Case52,
+    where
+    # Open Case
+    (cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date) >= TRUNC(cast(Vendor_Sales_Case52.EFFTV_BGN_TS as date),'MONTH') 
+    OR
+    # Closed Case
+    ((case when cast(Vendor_Sales_Case52.EFFTV_END_TS as date) = DATE '9999-12-31' then null
+    else cast(Vendor_Sales_Case52.EFFTV_END_TS as date end >= TRUNC(ADD_MONTHS(CURRENT_DATE,-12),'MON'))
+    and (case(Vendor_Sales_Case52.EFFTV_BGN_TS as date) >= TRUNC(ADD_MONTHS(CURRENT_DATE(),-24),'MON')))))
+    and
+    (Client_Information.CASE_RLSHP_TYP_CD = 'CLNT')
+    and
+    (Vendor_Sales_Case52.CREW_OWNR_PO_ID > 0)
+    and
+    (Vendor_Sales_Case52.ORG_OWNR_PO_ID != 1225977965)
+    and
+    (Vendor_Sales_Case52.CREW_OWNR_PO_ID IS NOT NULL)
+    and
+    (Vendor_Sales_Case52.VNDR_CASE_TYP_CD = 'SALE')
+    and
+    (Client_Information.VGI_ASGND_CASE_ID = Vendor_Sales_Case52.VGI_ASGND_CASE_ID)
+    and
+    (CASE WHEN CAST(Vendor_Sales_Case52.EFFTV_END_TS as date) = DATE '9999-12-31' THEN NULL
+    ELSE CAST(Vendor_Sales_Case52.EFFTV_END_TS as date) end = '2020-05-29')
+    and
+    (Vendor_Sales_Case52.CREW_OWNR_PO_ID) # unfinished condition
+    GROUP BY 
+    CASE CAST() #unfinished groupby                                                                                                   
                                                                                                                 
                                                                                                                 
