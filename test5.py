@@ -97,6 +97,27 @@ select
     and
     (Vendor_Sales_Case52.CREW_OWNR_PO_ID) # unfinished condition
     GROUP BY 
-    CASE CAST() #unfinished groupby                                                                                                   
+    CASE CAST() #unfinished groupby    
+    
+    
+    
+    
+    
+    
+    --updated
+    Where (
+        ( 
+            cast(vendor_sales_case52.efftv_bgn_ts as date) >= trunc(add_months(current_date,-12),’MON’)
+        ) or 
+        (
+            (
+                case when cast(vendor_sales_case52.efftv_end_ts as date) = ‘9999-12-31’ then null else cast( vendor_sales_case52.efftv_end_ts as date) end >= trunc(add_months(current_date,-12),'MON')
+            ) 
+            and 
+            (
+                cast(vendor_sales_case52.efftv_bgn_ts as date) >= trunc(add_months(current_date,-24),'MON')
+            )
+        ) 
+    )and
                                                                                                                 
                                                                                                                 
