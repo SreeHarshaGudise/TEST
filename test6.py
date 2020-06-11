@@ -28,9 +28,9 @@ filter_df = interim_df.filter((to_date(interim_df.EFFTV_BGN_TS) >= trunc(add_mon
 
 
 case_opened_df = filter_df.\
-    withColumnRenamed('EFFTV_BGN_TS','Case_Open_Date').\
-    groupBy('Case_Open_Date','Owner_POID').count().\
-    select(col('Case_Open_Date'),col('Owner_POID'),col('count').alias('Case_open_Ats'))
+    withColumn('Case_Open_Date',to_date(filter_df.EFFTV_BGN_TS,'yyyy-MM-dd')).\
+    groupBy('Case_Open_Date','Owner_POID','vndr_case_id').count().\
+    select(col('Case_Open_Date'),col('Owner_POID'),col('vndr_case_id').alias('VGI_ASGND_CASE_ID'),col('count').alias('Case_open_Ats'))
 
 
 
@@ -67,10 +67,10 @@ filter_df_closed = interim_df_closed.filter(((when(to_date(interim_df_closed.EFF
 case_closed_df = filter_df_closed.\
     withColumn('Case_Close_Date',
                when(to_date(filter_df_closed.EFFTV_END_TS) == '9999-12-31','null').
-               otherwise(to_date(filter_df_closed.EFFTV_END_TS))
+               otherwise(to_date(filter_df_closed.EFFTV_END_TS,'yyyy-MM-dd'))
                ).\
-    groupBy('Case_Close_Date','Owner_POID').count().\
-    select(col('Owner_POID'),col('Case_Close_Date'),col('count').alias('Case_close_Ats'))
+    groupBy('Case_Close_Date','Owner_POID','vndr_case_id').count().\
+    select(col('Owner_POID'),col('Case_Close_Date'),col('vndr_case_id').alias('VGI_ASGND_CASE_ID'),col('count').alias('Case_close_Ats'))
 
 
 
@@ -78,8 +78,8 @@ ats_counts = case_closed_df.\
     join(case_opened_df,
          (case_closed_df.Owner_POID == case_opened_df.Owner_POID),
          'outer').\
-    drop(case_closed_df.Owner_POID).\
-    select(col('Owner_POID'),col('Case_Open_Date'),col('Case_Close_Date'),col('Case_open_Ats'),col('Case_close_Ats'))
+    drop(case_closed_df.Owner_POID,case_closed_df.VGI_ASGND_CASE_ID).\
+    select(col('Owner_POID'),col('Case_Open_Date'),col('VGI_ASGND_CASE_ID'),col('Case_Close_Date'),col('Case_open_Ats'),col('Case_close_Ats'))
 
 
 
