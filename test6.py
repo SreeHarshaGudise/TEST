@@ -97,14 +97,14 @@ join(case_closed_df,
     ,'inner'
     ).
 drop(case_open_df.Owner_POID,case_open_df.VGI_Assigned_Case_ID).
-when(case_close_df.Owner_POID.isNull(),'null').otherwise(case_closed_df.Owner_POID).
-when(case_close_df.VGI_Assigned_Case_ID.isNull(),'null').otherwise(case_close_df.VGI_Assigned_Case_ID).
-when(case_open_df.case_open_date.isNull(),'null').otherwise(case_open_df.case_open_date).
-when(case_close_df.case_closed_date.isNull(),'null').otherwise(case_close_df.case_closed_date).
+withColumn('VGI_Assigned_Case_ID',when(case_close_df.VGI_Assigned_Case_ID.isNull(),'null').otherwise(case_close_df.VGI_Assigned_Case_ID)).
+withColumn('Owner_POID',when(case_close_df.Owner_POID.isNull(),'null').otherwise(case_closed_df.Owner_POID)).
+withColumn('Case_Open_Date',when(case_open_df.case_open_date.isNull(),'null').otherwise(case_open_df.case_open_date)).
+withColumn('Case_Closed_Date',when(case_close_df.case_closed_date.isNull(),'null').otherwise(case_close_df.case_closed_date)).
 select(
     col('VGI_Assigned_case_ID'),
     col('Case_Open_Date'),
-    col('Case_Closed_date'),
+    col('Case_Closed_Date'),
     col('Owner_POID')
     )
 
