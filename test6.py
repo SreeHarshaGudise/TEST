@@ -98,11 +98,13 @@ join(case_closed_df,
     ).
 withColumn(
     'vgi_assigned_case_id',
-    coalesce(case_open_df.VGI_Assigned_case_ID,case_close_cd.VGI_Assigned_case_ID)
+    when(case_open_df.VGI_Assigned_Case_ID.isNull(),case_close_df.VGI_Assigned_Case_ID).
+    when(case_close_df.VGI_Assigned_Case_ID.isNull(),case_open_df.VGI_Assigned_Case_ID)
     ).
 withColumn(
     'owner_POID',
-    coalesce(case_open_df.Owner_POID,case_close_df.Owner_POID)
+    when(case_open_df.Owner_POID.isNull(),case_close_df.Owner_POID).
+    when(case_close_df.Owner_POID.isNull(),case_open_df.Owner_POID)
     ).
 select(
     col('vgi_assigned_case_id'),
