@@ -113,3 +113,25 @@ select(
     col('owner_POID')
     )
 
+
+
+
+
+
+-----------------------------------------------------------------
+
+
+Ats_counts = 
+case_open_df.
+join(case_closed_df,
+    ('Owner_POID','VGI_Assigned_Case_ID')
+    ,'inner'
+    ).
+select(
+    col('VGI_Assigned_Case_ID'),
+    col('Case_Open_Date'),
+    col('Case_Closed_Date'),
+    col('Owner_POID')
+    )
+
+
