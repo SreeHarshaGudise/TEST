@@ -124,9 +124,9 @@ case_sum_closed_df = filter_ris_df_closed.\
                         )
                    ))
     groupBy('Case_Close_Date','CREW_OWNR_PO_ID').\
-    agg(sum('CycleTime').alias('CycleTime')
-        ).\
+    agg(sum('CycleTime')).alias('CycleTime').\
     select(
         col('CREW_OWNR_PO_ID').alias('Owner_POID'),
         col('Case_Close_Date'),col('CycleTime')
     )
+
