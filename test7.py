@@ -115,18 +115,15 @@ filter_ris_df_closed = interim_ris_sum_df_closed.\
 case_sum_closed_df = filter_ris_df_closed.\
     withColumn('Case_Close_Date',
                when(to_date(filter_ris_df_closed.EFFTV_END_TS) == '9999-12-31','null').
-               otherwise(to_date(filter_ris_df_closed.EFFTV_END_TS,'yyyy-MM-dd'))
-               ).\
-    withColumn('CycleTime',when(col('CASE_STATUS_CD') == 'OPEN',datediff(to_date(lit(date.today())),from_unixtime(unix_timestamp(filter_ris_df_closed.EFFTV_BGN_TS,'MM/dd/yyyy'))))
-                .otherwise(datediff
-                       (when(from_unixtime(unix_timestamp(filter_ris_df_closed.EFFTV_END_TS,'MM/dd/yyyy')) == '9999-12-31','null'),
-                        from_unixtime(unix_timestamp(filter_ris_df_closed.Case_Open_Date,'MM/dd/yyyy'))
-                        )
-                   ))
-    groupBy('Case_Close_Date','CREW_OWNR_PO_ID').\
-    agg(sum('CycleTime')).alias('CycleTime').\
-    select(
-        col('CREW_OWNR_PO_ID').alias('Owner_POID'),
-        col('Case_Close_Date'),col('CycleTime')
-    )
-
+               otherwise(to_date(filter_ris_df_closed.EFFTV_END_TS,'yyyy-MM-dd'))).\
+    withColumn('CycleTime',
+               when(filter_ris_df_closed.CASE_STATUS_CD == 'OPEN',
+                    datediff(to_date(lit(current_date())),
+                             to_date(unix_timestamp(filter_ris_df_closed.EFFTV_BGN_TS,'yyyy-MM-dd').cast("timestamp"))))\
+                    .otherwise(
+                   datediff(
+                       when(to_date(unix_timestamp(filter_ris_df_closed.EFFTV_END_TS,'yyyy-MM-dd').cast("timestamp")) == '9999-12-31','null'
+                            ).otherwise(to_date(unix_timestamp(filter_ris_df_closed.EFFTV_END_TS,'yyyy-MM-dd').cast("timestamp"))),to_date(filter_ris_df_closed.EFFTV_BGN_TS,'yyyy-MM-dd'))))\
+    .groupBy('Case_Close_Date','CREW_OWNR_PO_ID').sum('CycleTime')\
+    .select(col('CREW_OWNR_PO_ID').alias('Owner_POID'),col('Case_Close_Date'),col('''sum(CycleTime)''').alias('CycleTime')
+            )
