@@ -97,4 +97,4 @@ upper(trim(trim(a.associatename).substr(length(trim(a.associatename))-instr(reve
 
 --------------------------------------------
 
-final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(0,instr(trim(a.associatename),' ')-1))) == upper(trim(crewf.legal_name_first_name)))&()],"left")
+final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(0,instr(trim(imhfb.associatename),' ')-1))) == upper(trim(crewf.legal_name_first_name)))&()],"left")
