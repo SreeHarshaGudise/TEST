@@ -90,3 +90,11 @@ order by POID
 &
 upper(trim(trim(a.associatename).substr(length(trim(a.associatename))-instr(reverse(trim(a.associatename)),' ')+2)) == upper(trim(b.legal_name_last_name))
       )
+
+
+
+
+
+--------------------------------------------
+
+final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(0,instr(trim(a.associatename),' ')-1))) == upper(trim(crewf.legal_name_first_name)))&()],"left")
