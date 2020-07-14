@@ -105,4 +105,4 @@ final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(0,inst
 
 
 ###lastname condition as well
-final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(0,instr(trim(a.associatename),' ')-1))) == upper(trim(crewf.legal_name_first_name)))&(upper(trim(trim(imhfb.associatename).substr(instr(trim(a.associatename),' ')+1,length(trim(a.associatename)))))== upper(trim(crewf.legal_name_last_name)))],"left")
+final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(lit(0),instr(trim(imhfb.associatename),' ')-1))) == upper(trim(crewf.legal_name_first_name)))&(upper(trim(trim(imhfb.associatename).substr(instr(trim(imhfb.associatename),' ')+1,length(trim(imhfb.associatename)))))== upper(trim(crewf.legal_name_last_name)))],"left")
