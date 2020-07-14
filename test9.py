@@ -79,3 +79,14 @@ FROM (your select statement logic) a
 WHERE a.POID in (list_of_poids_you_need)
 group by POID
 order by POID
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------
+(upper(trim(trim(a.associatename).substr(0,instr(' ',trim(a.associatename))-1))) == upper(trim(b.legal_name_first_name)))
+&
+upper(trim(trim(a.associatename).substr(length(trim(a.associatename))-instr(' ',reverse(trim(a.associatename)))+2)) == upper(trim(b.legal_name_last_name))
+)
