@@ -105,4 +105,23 @@ final_df = imhfb.join(crewf,[(upper(trim(trim(imhfb.associatename).substr(0,inst
 
 
 ###lastname condition as well
-final_df = imhfb.join(crewf,[(upper(trim(trim(col('associatename')).substr(lit(0),instr(trim(col('associatename')),' ')-1))) == upper(trim(col('legal_name_first_name'))))&(upper(trim(trim(col('associatename')).substr(instr(trim(col('associatename')),' ')+1,length(trim(col('associatename'))))))== upper(trim(col('legal_name_last_name'))))],"left")
+final_df = 
+imhfb.join(crewf,
+           [((upper(trim(trim(col('associatename')).substr(lit(0),instr(trim(col('associatename')),' ')-1))) == upper(trim(col('legal_name_first_name'))))
+            &(upper(trim(trim(col('associatename')).substr(instr(trim(col('associatename')),' ')+1,length(trim(col('associatename')))))) == upper(trim(col('legal_name_last_name'))))) | 
+            (concat(upper(trim(trim(col('associatename')).substr(lit(0),instr(trim(col('associatename')),' ')-1)))," ",upper(trim(trim(col('associatename')).substr(instr(trim(col('associatename')),' ')+1,length(trim(col('associatename'))))))) == upper(trim(col('preferred_name'))))
+           ],"left")
+
+
+
+
+
+
+
+#### final and or condition
+
+((upper(trim(trim(col('associatename')).substr(lit(0),instr(trim(col('associatename')),' ')-1))) == upper(trim(col('legal_name_first_name'))))
+            &(upper(trim(trim(col('associatename')).substr(instr(trim(col('associatename')),' ')+1,length(trim(col('associatename')))))) == upper(trim(col('legal_name_last_name'))))) | 
+            (concat(upper(trim(trim(col('associatename')).substr(lit(0),instr(trim(col('associatename')),' ')-1))),lit(' '),upper(trim(trim(col('associatename')).substr(instr(trim(col('associatename')),' ')+1,length(trim(col('associatename'))))))) == upper(trim(col('preferred_name'))))
+
+
